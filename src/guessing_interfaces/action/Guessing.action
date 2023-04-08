@@ -1,0 +1,5 @@
+int32 guess
+---
+bool win
+---
+int32[] guessed

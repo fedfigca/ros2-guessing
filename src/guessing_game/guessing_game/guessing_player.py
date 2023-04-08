@@ -1,3 +1,4 @@
+"""Creates a ROS Node that will work as a player for the Guessing Game"""
 from random import randrange
 import time
 
@@ -10,6 +11,7 @@ from guessing_interfaces.action import Guessing
 from guessing_interfaces.msg import Guess
 
 class GuessingActionClient(Node):
+    """Defines the Node"""
     def __init__(self):
         super().__init__('guessing_action_client')
         self._action_client = ActionClient(self, Guessing, 'guessing')
@@ -17,12 +19,14 @@ class GuessingActionClient(Node):
         self.guessed = [0]
 
     def topic_callback(self, topic):
-        self.get_logger().info('{}'.format(topic.msg))
-        self.get_logger().info('Did they win? : {}'.format(topic.win))
+        """Handles recieved topic messages"""
+        self.get_logger().info(f'{topic.msg}')
+        self.get_logger().info(f'Did they win? : {topic.win}')
         if not topic.win:
             self.guessed = topic.guessed
 
     def send_goal(self):
+        """Sends a Guess to the Action Server Node"""
         self.get_logger().info('Sending guess')
         goal_msg = Guessing.Goal()
         goal_msg.guess = 0
@@ -38,6 +42,7 @@ class GuessingActionClient(Node):
         self._send_goal_future.add_done_callback(self.goal_response_callback)
 
     def goal_response_callback(self, future):
+        """Handles the response from the Action Server"""
         goal_handle = future.result()
         if not goal_handle.accepted:
             self.get_logger().info('Goal rejected :(')
@@ -49,6 +54,7 @@ class GuessingActionClient(Node):
         self._get_result_future.add_done_callback(self.get_result_callback)
 
     def get_result_callback(self, future):
+        """Handles the async result from the Action response"""
         result = future.result().result
 
         if result.win:
@@ -60,6 +66,7 @@ class GuessingActionClient(Node):
 
 
 def main(args=None):
+    """Starts the Node"""
     rclpy.init(args=args)
 
     action_client = GuessingActionClient()

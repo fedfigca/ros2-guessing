@@ -20,8 +20,14 @@ class GuessingActionClient(Node):
 
     def topic_callback(self, topic):
         """Handles recieved topic messages"""
-        self.get_logger().info(f'{topic.msg}')
-        self.get_logger().info(f'Did they win? : {topic.win}')
+        self.get_logger().info(f'Handling a topic: {topic.msg}')
+        if topic.msg == 'No guesses in a while':
+            self.send_goal()
+            self.guessed = topic.guessed
+        else:
+            self.get_logger().info(f'{topic.msg}')
+            self.get_logger().info(f'Did they win? : {topic.win}')
+
         if not topic.win:
             self.guessed = topic.guessed
 
@@ -70,7 +76,6 @@ def main(args=None):
     rclpy.init(args=args)
 
     action_client = GuessingActionClient()
-    action_client.send_goal()
 
     try:
         rclpy.spin(action_client)

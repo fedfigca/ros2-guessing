@@ -39,7 +39,7 @@ ros2 run guessing_game guessing_player
 ## TODO
 
 * Allow for multiple players
-* Start a new round after the winning number is guessed
+* ~~Start a new round after the winning number is guessed~~
 
 ## Contributing
 

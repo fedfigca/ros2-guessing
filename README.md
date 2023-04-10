@@ -21,8 +21,8 @@ colcon build
 
 ## Usage
 
-Load the environment variables into the system
-Run the server node
+* Load the environment variables into the system
+* Run the server node
 
 ```bash
 source install/setup.bash
